@@ -33,7 +33,7 @@ require 'lspconfig'['pylsp'].setup {
                 pylsp_mypy = { enabled = false },
                 pycodestyle = {
                     enabled = true,
-                    ignore = { 'E501', 'E231', 'W391' },
+                    ignore = { 'E501', 'E302', 'E231', 'W391' },
                     maxLineLength = 120
                 },
             }
