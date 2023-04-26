@@ -45,6 +45,15 @@ return require('packer').startup(function(use)
 		{'L3MON4D3/LuaSnip'},     -- Required
 		{'rafamadriz/friendly-snippets'}, -- Optional
 	},
-    use("eandrju/cellular-automaton.nvim")
+    use("eandrju/cellular-automaton.nvim"),
+    use {
+        'nvim-tree/nvim-tree.lua',
+        requires = {
+            'nvim-tree/nvim-web-devicons', -- optional
+        },
+        config = function()
+            require("nvim-tree").setup {}
+        end
+    }
 }
 end)
