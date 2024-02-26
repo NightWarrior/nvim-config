@@ -1,12 +1,12 @@
 
 function ColorMyPencils(color)
+  vim.cmd.colorscheme "catppuccin"
 	-- color = color or "onedark"
 	-- vim.cmd.colorscheme(color)
 	-- require('onedark').setup {
 	-- 	transparent = true
 	-- }
 
-  vim.cmd.colorscheme "catppuccin"
 
 require("catppuccin").setup({
     flavour = "mocha", -- latte, frappe, macchiato, mocha
