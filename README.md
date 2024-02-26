@@ -3,7 +3,7 @@
 First we need Packer, we need to clone its data:
 
 
-> Unix, Linux Installation
+> Unix, Linux [Installation](https://github.com/wbthomason/packer.nvim)
 
 ```shell
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
@@ -24,3 +24,8 @@ Then navigate to init.lua inside of /nvim and run `:so` and it should allow you 
 :PackerSync
 ```
 which will install packages. Close nvim and reopen it and most of things will start to work.
+
+To install lsp packages run
+```
+:MasonInstall
+```
