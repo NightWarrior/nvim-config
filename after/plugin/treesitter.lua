@@ -1,4 +1,6 @@
-require 'nvim-treesitter.install'.compilers = { "zig" }
+if vim.loop.os_uname().sysname == "Windows_NT" then
+  require 'nvim-treesitter.install'.compilers = { "zig" }
+end
 
 require 'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)

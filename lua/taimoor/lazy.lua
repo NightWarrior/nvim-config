@@ -1,10 +1,29 @@
 require("lazy").setup({
   {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup()
+    end
+  },
+  {
     'nvim-telescope/telescope.nvim',
     dependencies = { { 'nvim-lua/plenary.nvim' } }
   },
   { 'catppuccin/nvim', name = 'catppuccin' },
-  { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    config = function()
+      local configs = require("nvim-treesitter.configs")
+
+      configs.setup({
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "javascript", "typescript", "html" },
+        sync_install = false,
+        highlight = { enable = true },
+        indent = { enable = true },
+      })
+    end
+  },
   'nvim-treesitter/nvim-treesitter-context',
   'theprimeagen/harpoon',
   'mbbill/undotree',
@@ -49,12 +68,6 @@ require("lazy").setup({
       require("nvim-tree").setup {}
     end
   },
-  {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup()
-    end
-  },
   'windwp/nvim-ts-autotag',
   {
     "windwp/nvim-autopairs",
@@ -63,7 +76,7 @@ require("lazy").setup({
   'Exafunction/codeium.vim',
   {
     'folke/todo-comments.nvim',
-    dependencies = {"nvim-lua/plenary.nvim"},
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function() require("todo-comments").setup {} end
   }
 })
