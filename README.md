@@ -1,31 +1,9 @@
 # nvim-config
 
-First we need Packer, we need to clone its data:
+This uses lazy to install packages, let it run on startup, or restart it if it doesnt run on the first time.
 
 
-> Unix, Linux [Installation](https://github.com/wbthomason/packer.nvim)
-
-```shell
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-```
-
-If you use Arch Linux, there is also [an AUR
-package](https://aur.archlinux.org/packages/nvim-packer-git/).
-
-> Windows Powershell Installation
-
-```shell
-git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
-```
-
-Then navigate to init.lua inside of /nvim and run `:so` and it should allow you to use 
-```shell
-:PackerSync
-```
-which will install packages. Close nvim and reopen it and most of things will start to work.
-
-To install lsp packages run
+In case lsp packages not working, try running
 ```
 :MasonInstall
 ```

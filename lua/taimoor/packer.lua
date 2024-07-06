@@ -11,10 +11,8 @@ return require('packer').startup(function(use)
     -- or                            , branch = '0.1.x',
     requires = { { 'nvim-lua/plenary.nvim' } }
   }
-  use 'navarasu/onedark.nvim'
   use { "catppuccin/nvim", as = "catppuccin" }
-  use({ 'rose-pine/neovim', as = 'rose-pine' })
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  -- use { 'nvim-treesitter/nvim-treesitter', tag = 'v0.9.2', run = ':TSUpdate', }
   use 'nvim-treesitter/nvim-treesitter-context'
   use 'nvim-treesitter/playground'
   use 'theprimeagen/harpoon'
