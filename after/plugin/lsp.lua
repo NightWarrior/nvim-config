@@ -21,10 +21,12 @@ lsp.set_preferences({
   sign_icons = {}
 })
 
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 require 'lspconfig'['pylsp'].setup {
   on_attach = on_attach,
   filetypes = { 'python' },
+  capabilities = capabilities,
   settings = {
     configurationSources = { "flake8" },
     formatCommand = { "black" },
@@ -44,10 +46,12 @@ require 'lspconfig'['pylsp'].setup {
 require 'lspconfig'['tsserver'].setup {
   on_attach = on_attach,
   filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'typescript.tsx', 'jsx' },
+  capabilities = capabilities,
 }
 
 require 'lspconfig'['eslint'].setup {
   on_attach = on_attach,
+  capabilities = capabilities,
   filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx', 'jsx' },
 
 }
@@ -61,6 +65,8 @@ lsp.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, remap = false }
 
   vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+  vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, opts)
+  vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
   vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
   vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
   vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)

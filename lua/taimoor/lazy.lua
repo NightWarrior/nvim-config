@@ -30,6 +30,7 @@ require("lazy").setup({
   'nvimtools/none-ls.nvim',
   'MunifTanjim/prettier.nvim',
   'tpope/vim-fugitive',
+  'tpope/vim-obsession',
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
@@ -78,5 +79,19 @@ require("lazy").setup({
     'folke/todo-comments.nvim',
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function() require("todo-comments").setup {} end
-  }
+  },
+  'hrsh7th/nvim-cmp',
+  'hrsh7th/cmp-nvim-lsp',
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
+  'saadparwaiz1/cmp_luasnip',
+  {
+    'L3MON4D3/LuaSnip',
+    version = "v2.*",
+    build = "make install_jsregexp", -- Optional
+  },
+  'rafamadriz/friendly-snippets'
+
 })
