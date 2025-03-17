@@ -1,7 +1,17 @@
 require("lazy").setup({
   {
     'nvim-telescope/telescope.nvim',
-    dependencies = { { 'nvim-lua/plenary.nvim' } }
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('telescope').setup({
+        pickers = {
+          find_files = {
+            hidden = true,
+            no_ignore = true,
+          }
+        }
+      })
+    end
   },
   { 'catppuccin/nvim', name = 'catppuccin' },
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
@@ -46,7 +56,11 @@ require("lazy").setup({
       'nvim-tree/nvim-web-devicons', -- optional
     },
     config = function()
-      require("nvim-tree").setup {}
+      require("nvim-tree").setup {
+        git = {
+          ignore = false
+        }
+      }
     end
   },
   {
