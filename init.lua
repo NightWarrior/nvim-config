@@ -11,6 +11,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.g.python3_host_prog = vim.fn.expand('~/.venvs/nvim/bin/python3')
 
 require('taimoor')
 

@@ -67,3 +67,10 @@ vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
 vim.keymap.set("n", "<leader><leader>", function()
   vim.cmd("so")
 end)
+
+function ReloadSnippets()
+  require("luasnip").snippets = {}
+  require("luasnip.loaders.from_lua").load({ paths = { "~/.config/nvim/Snippets" } })
+  print("LuaSnip snippets reloaded!")
+end
+vim.api.nvim_set_keymap('n', '<leader>rs', ':lua ReloadSnippets()<CR>', { noremap = true, silent = true })
