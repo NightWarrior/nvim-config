@@ -7,7 +7,7 @@ local snippets = {
     t({
       "import React from 'react';",
       "import { View, Text } from 'react-native';",
-      "import styles from './cmp.styles.ts",
+      "import styles from './cmp.styles.ts'",
       "",
       "interface Props {",
       "}",

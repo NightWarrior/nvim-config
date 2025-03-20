@@ -88,7 +88,13 @@ require("lazy").setup({
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
   },
-  'Exafunction/codeium.vim',
+  {
+    'Exafunction/codeium.vim',
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+  },
   {
     'folke/todo-comments.nvim',
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -136,6 +142,30 @@ require("lazy").setup({
         },
       })
     end,
+  },
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
+  {
+    'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' }, -- if you install parsers with `nvim-treesitter`
+    config = function()
+      require('treesj').setup({ --[[ your config ]] })
+    end,
+  },
+  'tpope/vim-surround',
+  'tpope/vim-repeat',
+  {
+    'mg979/vim-visual-multi',
+    branch = "master"
+  },
+  {
+    'terrortylor/nvim-comment',
+    config = function()
+      require('nvim_comment').setup()
+    end
   }
-
 })

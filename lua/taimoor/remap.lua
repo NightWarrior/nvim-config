@@ -41,22 +41,22 @@ vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 -- vim.keymap.set("n", "<leader>/", "ma^i// <Esc>`a") -- add comment lines at the start of line
-vim.keymap.set("n", "<leader>c", function()
-    -- Get the content of the current line
-    local line_content = vim.api.nvim_get_current_line()
-    -- Check if the line starts with "//"
-    if line_content:match("^%s*//") then
-        -- Line is commented, remove the comment
-        -- local uncommented = line_content:gsub("^%s*%s?", "", 1)
-        local uncommented = line_content:gsub("//%s?", "")
-        vim.api.nvim_set_current_line(uncommented)
-    else
-        -- Line is not commented, add the comment
-        -- Insert "// " at the beginning of the line, preserving leading whitespace
-        local commented = line_content:gsub("^(%s*)", "%1// ")
-        vim.api.nvim_set_current_line(commented)
-    end
-end, { noremap = true, silent = true })
+-- vim.keymap.set("n", "<leader>c", function()
+--     -- Get the content of the current line
+--     local line_content = vim.api.nvim_get_current_line()
+--     -- Check if the line starts with "//"
+--     if line_content:match("^%s*//") then
+--         -- Line is commented, remove the comment
+--         -- local uncommented = line_content:gsub("^%s*%s?", "", 1)
+--         local uncommented = line_content:gsub("//%s?", "")
+--         vim.api.nvim_set_current_line(uncommented)
+--     else
+--         -- Line is not commented, add the comment
+--         -- Insert "// " at the beginning of the line, preserving leading whitespace
+--         local commented = line_content:gsub("^(%s*)", "%1// ")
+--         vim.api.nvim_set_current_line(commented)
+--     end
+-- end, { noremap = true, silent = true })
 
 
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]) -- search and replace
@@ -74,3 +74,7 @@ function ReloadSnippets()
   print("LuaSnip snippets reloaded!")
 end
 vim.api.nvim_set_keymap('n', '<leader>rs', ':lua ReloadSnippets()<CR>', { noremap = true, silent = true })
+
+-- TSToolsAddMissingImports
+vim.api.nvim_set_keymap('n', '<leader>ti', ':TSToolsAddMissingImports<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>to', ':TSToolsOrganizeImports<CR>', { noremap = true, silent = true })
