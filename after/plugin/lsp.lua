@@ -9,7 +9,7 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 lsp.ensure_installed({
   -- Replace these with whatever servers you want to install
-  'tsserver',
+  'ts_ls',
   'eslint',
   'lua_ls',
   'pylsp',
@@ -43,7 +43,7 @@ require 'lspconfig'['pylsp'].setup {
   }
 }
 
-require 'lspconfig'['tsserver'].setup {
+require 'lspconfig'['ts_ls'].setup {
   on_attach = on_attach,
   filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'typescript.tsx', 'jsx' },
   capabilities = capabilities,
