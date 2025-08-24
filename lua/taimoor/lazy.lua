@@ -88,7 +88,16 @@ require("lazy").setup({
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
   },
-  'Exafunction/codeium.vim',
+  --  'Exafunction/codeium.vim',
+  --  '{
+  --  ''github/copilot.vim',
+  --  '},
+  {
+    "supermaven-inc/supermaven-nvim",
+    config = function()
+      require("supermaven-nvim").setup({})
+    end,
+  },
   {
     'folke/todo-comments.nvim',
     dependencies = { "nvim-lua/plenary.nvim" },
