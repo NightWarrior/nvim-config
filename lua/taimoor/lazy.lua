@@ -12,8 +12,8 @@ require("lazy").setup({
       require('telescope').setup({
         pickers = {
           find_files = {
-            hidden = true,
-            no_ignore = true,
+            -- hidden = true,
+            -- no_ignore = true,
           }
         }
       })
@@ -115,6 +115,60 @@ require("lazy").setup({
     version = "v2.*",
     build = "make install_jsregexp", -- Optional
   },
-  'rafamadriz/friendly-snippets'
-
+  'rafamadriz/friendly-snippets',
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    config = function()
+      require("toggleterm").setup({
+        size = function(term)
+          if term.direction == "horizontal" then
+            return 10 -- Height for horizontal terminal
+          elseif term.direction == "vertical" then
+            return 40 -- Width for vertical terminal
+          end
+        end,
+        open_mapping = [[<C-\>]], -- Toggle terminal with Ctrl + \
+        hide_numbers = true,    -- Hide line numbers in terminal mode
+        shade_terminals = true, -- Dim background for terminals
+        shading_factor = 2,     -- Darken terminal background slightly
+        start_in_insert = true, -- Start in insert mode
+        insert_mappings = true, -- Allows mappings in insert mode
+        terminal_mappings = true, -- Enables terminal keybindings
+        persist_size = true,    -- Terminal size remains the same
+        direction = "float",    -- Default terminal mode (horizontal, vertical, float, tab)
+        close_on_exit = true,   -- Auto-close terminal on process exit
+        shell = vim.o.shell,    -- Use default shell
+        float_opts = {
+          border = "curved",    -- Floating terminal border style
+          winblend = 10,        -- Transparency
+        },
+      })
+    end,
+  },
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
+  {
+    'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' }, -- if you install parsers with `nvim-treesitter`
+    config = function()
+      require('treesj').setup({ --[[ your config ]] })
+    end,
+  },
+  'tpope/vim-surround',
+  'tpope/vim-repeat',
+  {
+    'mg979/vim-visual-multi',
+    branch = "master"
+  },
+  {
+    'terrortylor/nvim-comment',
+    config = function()
+      require('nvim_comment').setup()
+    end
+  }
 })
