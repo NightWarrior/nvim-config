@@ -1,4 +1,8 @@
-local prettier = require("prettier")
+-- Protected call to avoid startup errors if prettier not yet installed
+local status_ok, prettier = pcall(require, "prettier")
+if not status_ok then
+  return
+end
 
 prettier.setup({
   bin = 'prettier', -- or `'prettierd'` (v0.23.3+)

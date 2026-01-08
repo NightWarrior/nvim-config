@@ -1,8 +1,17 @@
-if vim.loop.os_uname().sysname == "Windows_NT" then
-  require 'nvim-treesitter.install'.compilers = { "zig" }
+-- Protected call to avoid startup errors if treesitter not yet installed
+local status_ok, configs = pcall(require, 'nvim-treesitter.configs')
+if not status_ok then
+  return
 end
 
-require 'nvim-treesitter.configs'.setup {
+if vim.loop.os_uname().sysname == "Windows_NT" then
+  local install_ok, install = pcall(require, 'nvim-treesitter.install')
+  if install_ok then
+    install.compilers = { "zig" }
+  end
+end
+
+configs.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
   ensure_installed = { "vimdoc", "javascript", "typescript", "python", "c", "lua", "vim", "vimdoc", "query" },
 

@@ -1,4 +1,8 @@
-local null_ls = require("null-ls")
+-- Protected call to avoid startup errors if null-ls not yet installed
+local status_ok, null_ls = pcall(require, "null-ls")
+if not status_ok then
+  return
+end
 
 local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
 local event = "BufWritePre" -- or "BufWritePost"

@@ -1,11 +1,23 @@
-local lsp = require('lsp-zero').preset({})
+-- LSP Zero configuration
+-- Note: You may see deprecation warnings from lspconfig when using lsp-zero v2.x
+-- These are informational and don't affect functionality
+local lsp_ok, lsp = pcall(require, 'lsp-zero')
+if not lsp_ok then
+  vim.notify("lsp-zero not installed yet - will be available after plugin installation", vim.log.levels.WARN)
+  return
+end
+
+lsp = lsp.preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({ buffer = bufnr })
 end)
 
 -- (Optional) Configure lua language server for neovim
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
+if lspconfig_ok then
+  lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
+end
 
 lsp.ensure_installed({
   -- Replace these with whatever servers you want to install
@@ -23,7 +35,8 @@ lsp.set_preferences({
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-require 'lspconfig'['pylsp'].setup {
+if lspconfig_ok then
+  lspconfig['pylsp'].setup {
   on_attach = on_attach,
   filetypes = { 'python' },
   capabilities = capabilities,
@@ -43,22 +56,22 @@ require 'lspconfig'['pylsp'].setup {
   }
 }
 
-require 'lspconfig'['ts_ls'].setup {
-  on_attach = on_attach,
-  filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'typescript.tsx', 'jsx' },
-  capabilities = capabilities,
-}
+  lspconfig['ts_ls'].setup {
+    on_attach = on_attach,
+    filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'typescript.tsx', 'jsx' },
+    capabilities = capabilities,
+  }
 
-require 'lspconfig'['eslint'].setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx', 'jsx' },
+  lspconfig['eslint'].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx', 'jsx' },
+  }
 
-}
+  lspconfig['vimls'].setup {}
 
-require 'lspconfig'['vimls'].setup {}
-
-require 'lspconfig'['clangd'].setup {}
+  lspconfig['clangd'].setup {}
+end
 
 
 lsp.on_attach(function(client, bufnr)

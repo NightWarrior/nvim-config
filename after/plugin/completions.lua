@@ -1,7 +1,23 @@
-local cmp = require("cmp")
+-- Protected call to avoid startup errors if cmp not yet installed
+local cmp_ok, cmp = pcall(require, "cmp")
+if not cmp_ok then
+  return
+end
 
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_lua").load({ paths = { "~/.config/nvim/Snippets" } })
+local luasnip_ok, luasnip = pcall(require, "luasnip")
+if luasnip_ok then
+  require("luasnip.loaders.from_vscode").lazy_load()
+  
+  -- Use Windows-compatible path
+  local snippets_path = vim.fn.stdpath('config') .. '\\Snippets'
+  if vim.fn.has('win32') == 0 then
+    snippets_path = vim.fn.stdpath('config') .. '/Snippets'
+  end
+  
+  if vim.fn.isdirectory(snippets_path) == 1 then
+    require("luasnip.loaders.from_lua").load({ paths = { snippets_path } })
+  end
+end
 
 cmp.setup({
   mapping = cmp.mapping.preset.insert({
@@ -13,7 +29,9 @@ cmp.setup({
   }),
   snippet = {
     expand = function(args)
-      require("luasnip").lsp_expand(args.body)
+      if luasnip_ok then
+        luasnip.lsp_expand(args.body)
+      end
     end,
   },
   sources = cmp.config.sources({
