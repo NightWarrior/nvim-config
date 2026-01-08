@@ -32,33 +32,35 @@ require("lazy").setup({
   'MunifTanjim/prettier.nvim',
   'tpope/vim-fugitive',
   'tpope/vim-obsession',
+  -- LSP Support - Modern approach using vim.lsp.config (Neovim 0.11+)
   {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
-    dependencies = {
-      -- LSP Support
-      { 'neovim/nvim-lspconfig' }, -- Required
-      {
-        -- Optional
-        'williamboman/mason.nvim',
-        build = function()
-          pcall(vim.cmd, 'MasonUpdate')
-        end,
-      },
-      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
-
-      -- Autocompletion
-      { 'hrsh7th/nvim-cmp' },         -- Required
-      { 'hrsh7th/cmp-nvim-lsp' },     -- Required
-      { 'hrsh7th/cmp-buffer' },       -- Optional
-      { 'hrsh7th/cmp-path' },         -- Optional
-      { 'saadparwaiz1/cmp_luasnip' }, -- Optional
-      { 'hrsh7th/cmp-nvim-lua' },     -- Optional
-
-      -- Snippets
-      { 'L3MON4D3/LuaSnip' },             -- Required
-      { 'rafamadriz/friendly-snippets' }, -- Optional
-    }
+    'neovim/nvim-lspconfig',
+    -- lspconfig is now just a collection of server configs, not a "framework"
+  },
+  {
+    'williamboman/mason.nvim',
+    build = function()
+      pcall(vim.cmd, 'MasonUpdate')
+    end,
+    config = function()
+      require('mason').setup()
+    end,
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    config = function()
+      require('mason-lspconfig').setup({
+        ensure_installed = {
+          'lua_ls',
+          'ts_ls',
+          'eslint',
+          'pylsp',
+          'vimls',
+          'clangd',
+        },
+        automatic_installation = true,
+      })
+    end,
   },
   'eandrju/cellular-automaton.nvim',
   {
@@ -94,12 +96,12 @@ require("lazy").setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function() require("todo-comments").setup {} end
   },
+  -- Autocompletion
   'hrsh7th/nvim-cmp',
   'hrsh7th/cmp-nvim-lsp',
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' }
-  },
+  'hrsh7th/cmp-buffer',
+  'hrsh7th/cmp-path',
+  'hrsh7th/cmp-nvim-lua',
   'saadparwaiz1/cmp_luasnip',
   {
     'L3MON4D3/LuaSnip',
@@ -107,6 +109,10 @@ require("lazy").setup({
     build = "make install_jsregexp", -- Optional
   },
   'rafamadriz/friendly-snippets',
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
   {
     "akinsho/toggleterm.nvim",
     version = "*",

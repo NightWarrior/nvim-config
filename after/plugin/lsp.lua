@@ -1,48 +1,63 @@
--- LSP Zero configuration
--- Note: You may see deprecation warnings from lspconfig when using lsp-zero v2.x
--- These are informational and don't affect functionality
-local lsp_ok, lsp = pcall(require, 'lsp-zero')
-if not lsp_ok then
-  vim.notify("lsp-zero not installed yet - will be available after plugin installation", vim.log.levels.WARN)
-  return
+-- Modern LSP configuration using vim.lsp.config (Neovim 0.11+)
+-- This replaces the deprecated require('lspconfig') approach
+
+-- Get default capabilities from nvim-cmp
+local cmp_ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+local capabilities = cmp_ok and cmp_lsp.default_capabilities() or vim.lsp.protocol.make_client_capabilities()
+
+-- Common on_attach function for all LSP servers
+local on_attach = function(client, bufnr)
+  local opts = { buffer = bufnr, remap = false }
+
+  -- LSP keymaps
+  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+  vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+  vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
+  vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
+  vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
+  vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
+  vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
+  vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
+  vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
+  vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
 end
 
-lsp = lsp.preset({})
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({ buffer = bufnr })
-end)
-
--- (Optional) Configure lua language server for neovim
-local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
-if lspconfig_ok then
-  lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
-end
-
-lsp.ensure_installed({
-  -- Replace these with whatever servers you want to install
-  'ts_ls',
-  'eslint',
-  'lua_ls',
-  'pylsp',
-  -- 'rust_analyzer',
-  'vimls',
+-- Configure LSP servers using modern vim.lsp.config API
+-- Lua Language Server
+vim.lsp.config('lua_ls', {
+  cmd = { 'lua-language-server' },
+  root_markers = { '.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git' },
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    Lua = {
+      runtime = { version = 'LuaJIT' },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          "${3rd}/luv/library"
+        }
+      },
+      completion = { callSnippet = 'Replace' },
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
 })
 
-lsp.set_preferences({
-  sign_icons = {}
-})
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-if lspconfig_ok then
-  lspconfig['pylsp'].setup {
+-- Python LSP
+vim.lsp.config('pylsp', {
+  cmd = { 'pylsp' },
+  root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', 'pyrightconfig.json', '.git' },
+  capabilities = capabilities,
   on_attach = on_attach,
   filetypes = { 'python' },
-  capabilities = capabilities,
   settings = {
-    configurationSources = { "flake8" },
-    formatCommand = { "black" },
     pylsp = {
       plugins = {
         pylsp_mypy = { enabled = false },
@@ -54,47 +69,57 @@ if lspconfig_ok then
       }
     }
   }
-}
+})
 
-  lspconfig['ts_ls'].setup {
-    on_attach = on_attach,
-    filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'typescript.tsx', 'jsx' },
-    capabilities = capabilities,
-  }
+-- TypeScript/JavaScript LSP (using ts_ls)
+vim.lsp.config('ts_ls', {
+  cmd = { 'typescript-language-server', '--stdio' },
+  root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' }
+})
 
-  lspconfig['eslint'].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'typescript.tsx', 'jsx' },
-  }
+-- ESLint LSP
+vim.lsp.config('eslint', {
+  cmd = { 'vscode-eslint-language-server', '--stdio' },
+  root_markers = { '.eslintrc', '.eslintrc.js', '.eslintrc.cjs', '.eslintrc.yaml', '.eslintrc.yml', '.eslintrc.json', 'eslint.config.js', 'package.json', '.git' },
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' }
+})
 
-  lspconfig['vimls'].setup {}
+-- Vim LSP
+vim.lsp.config('vimls', {
+  cmd = { 'vim-language-server', '--stdio' },
+  root_markers = { '.git' },
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = { 'vim' }
+})
 
-  lspconfig['clangd'].setup {}
-end
+-- Clangd (C/C++)
+vim.lsp.config('clangd', {
+  cmd = { 'clangd' },
+  root_markers = { '.clangd', '.clang-tidy', '.clang-format', 'compile_commands.json', 'compile_flags.txt', 'configure.ac', '.git' },
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' }
+})
 
+-- Enable the configured LSP servers
+vim.lsp.enable('lua_ls')
+vim.lsp.enable('pylsp')
+vim.lsp.enable('ts_ls')
+vim.lsp.enable('eslint')
+vim.lsp.enable('vimls')
+vim.lsp.enable('clangd')
 
-lsp.on_attach(function(client, bufnr)
-  local opts = { buffer = bufnr, remap = false }
-
-  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-  vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end, opts)
-  vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
-  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-  vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
-  vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-  vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
-  vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
-  vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
-  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-  vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format() end, opts)
-end)
-
-lsp.setup()
-
-
+-- Diagnostic configuration
 vim.diagnostic.config({
-  virtual_text = true
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
 })

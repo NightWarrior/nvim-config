@@ -8,7 +8,8 @@ Before using this configuration, ensure you have the following installed:
 
 ### Required Dependencies
 
-1. **Neovim** (v0.9.0 or higher)
+1. **Neovim** (v0.11.0 or higher)
+   - Required for the modern `vim.lsp.config` API
    - Download from [neovim.io](https://neovim.io/)
 
 2. **Git**
@@ -77,7 +78,7 @@ Before using this configuration, ensure you have the following installed:
 - **lazy.nvim** - Fast and modern plugin manager
 
 ### LSP & Completion
-- **lsp-zero** - Easy LSP configuration
+- **Modern Neovim LSP** - Using native `vim.lsp.config` API (Neovim 0.11+)
 - **Mason** - LSP server installer
 - **nvim-cmp** - Autocompletion engine
 - **LuaSnip** - Snippet engine
@@ -110,7 +111,6 @@ Before using this configuration, ensure you have the following installed:
 ## Troubleshooting
 
 ### Common Warnings (Expected)
-- **lspconfig deprecation warning**: This is an informational warning from lsp-zero v2.x and doesn't affect functionality. It will be resolved when the project upgrades to lsp-zero v3.x or migrates to native vim.lsp.config
 - **prettier not found**: Only appears if you haven't installed prettier globally. Install with `npm install -g prettier` if you want to use it
 
 ### Issues
